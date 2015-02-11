@@ -11,7 +11,7 @@ Usage of agent-auth:
   -keyfile="": Path to OSSEC client keys file (client.keys)
   -listen=false: Enables running in server mode
   -manager="": Manager IP Address
-  -name="harperrc-lnx": Agent name
+  -name="localhost": Agent name
   -port=1515: Manager port
 ```
 
