@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/sedarasecurity/ossec/types"
+	"github.com/sedarasecurity/ossec-config-schema"
 	"github.com/zerklabs/auburn/log"
 )
 
