@@ -1,9 +1,11 @@
 package main
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/zerklabs/auburn/log"
 	"github.com/zerklabs/auburn/utils"
 )
 
@@ -53,4 +55,15 @@ func getClientKeysPath(p string) string {
 	}
 
 	return ""
+}
+
+func createDefaultClientKeys() error {
+	p := filepath.Join(defaultPath, "client.keys")
+	log.Debugf("Creating client.keys at %s", p)
+
+	if _, err := os.Create(p); err != nil {
+		return err
+	}
+
+	return nil
 }

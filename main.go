@@ -55,6 +55,9 @@ func main() {
 
 	// client.keys
 	keysFile := getClientKeysPath(clientkeys)
+	if keysFile == "" {
+		createDefaultClientKeys()
+	}
 
 	key, err := register(manager, port)
 	if err != nil {
@@ -80,7 +83,8 @@ func main() {
 }
 
 func register(host string, port int) (string, error) {
-	// see https://github.com/ossec/ossec-hids/blob/master/src/os_auth/main-server.c#L380 for buffer allocated from ossec-auth server
+	// see https://github.com/ossec/ossec-hids/blob/master/src/os_auth/main-server.c#L380 for buffer
+	// allocated from ossec-auth server
 	buf := make([]byte, 2048)
 
 	// TODO(rch): this shouldn't ignore the certificate
@@ -98,7 +102,7 @@ func register(host string, port int) (string, error) {
 	// timeout reading from the connection if we don't hear a response in 60 seconds
 	err = conn.SetReadDeadline(time.Now().Add(time.Second * 60))
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("timeout waiting for response from server: %v", err)
 	}
 
 	// send the request
@@ -135,11 +139,19 @@ func appendkey(file, line string, isclient bool) error {
 	var fh *os.File
 	var err error
 
+	if file == "" {
+		return fmt.Errorf("client.keys not found")
+	}
+
 	if isclient {
 		fh, err = os.OpenFile(file, os.O_CREATE|os.O_RDWR|os.O_SYNC, 0700)
 		if err != nil {
 			fh.Close()
-			return err
+			if os.IsNotExist(err) {
+				createDefaultClientKeys()
+			} else {
+				return fmt.Errorf("error appending key to client.keys: %v", err)
+			}
 		}
 		defer fh.Close()
 	} else {
@@ -167,7 +179,7 @@ func readconfig(file string) (*bytes.Buffer, error) {
 	fh, err := os.Open(file)
 	if err != nil {
 		fh.Close()
-		return buf, err
+		return buf, fmt.Errorf("error reading config at %s: %v", file, err)
 	}
 	defer fh.Close()
 	buf.ReadFrom(fh)

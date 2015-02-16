@@ -5,4 +5,6 @@ var (
 		"/etc/",
 		"/var/ossec/etc/",
 	}
+
+	defaultPath = "/var/ossec/etc/"
 )
