@@ -3,6 +3,9 @@ ossec-agent-auth
 
 Implementation of the agent-auth client in go
 
+## Download:
+[Latest Release](https://github.com/sedarasecurity/ossec-agent-auth/releases/latest)
+
 ## Usage:
 
 ```
