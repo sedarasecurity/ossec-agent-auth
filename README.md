@@ -21,6 +21,12 @@ Usage of agent-auth:
 ## Implementation:
 By default, the agent will modify the ossec.conf file to update the manager's IP with the one given on the command line.
 
+## Example:
+
+```
+$> agent-auth -config="/var/ossec/etc/ossec.conf" -keyfile="/var/ossec/etc/client.keys" -manager="192.168.0.2" -name="server1"
+```
+
 ## Known Issues:
 * DNS resolution currently not implemented; the manager flag expects an IP
 
