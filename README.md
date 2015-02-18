@@ -16,6 +16,7 @@ Usage of agent-auth:
   -manager="": Manager IP Address
   -name="localhost": Agent name
   -port=1515: Manager port
+  -controlsvc=false: Enable or disable ossec-agent service control
 ```
 
 ## Implementation:

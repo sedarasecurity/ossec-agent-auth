@@ -10,18 +10,20 @@ import (
 )
 
 func getOssecConfPath(p string) string {
-	if strings.Contains(strings.ToLower(p), "ossec.conf") {
-		p = filepath.Dir(p)
-	}
-
-	if p != "" && !utils.StrInArray(p, paths) {
-		newPaths := make([]string, 0)
-		newPaths = append(newPaths, p)
-		for _, v := range paths {
-			newPaths = append(newPaths, v)
+	if p != "" {
+		if strings.Contains(strings.ToLower(p), "ossec.conf") {
+			p = filepath.Dir(p)
 		}
 
-		paths = newPaths
+		if !utils.StrInArray(p, paths) {
+			newPaths := make([]string, 0)
+			newPaths = append(newPaths, p)
+			for _, v := range paths {
+				newPaths = append(newPaths, v)
+			}
+
+			paths = newPaths
+		}
 	}
 
 	for _, v := range paths {
@@ -34,18 +36,20 @@ func getOssecConfPath(p string) string {
 }
 
 func getClientKeysPath(p string) string {
-	if strings.Contains(strings.ToLower(p), "client.keys") {
-		p = filepath.Dir(p)
-	}
-
-	if p != "" && !utils.StrInArray(p, paths) {
-		newPaths := make([]string, 0)
-		newPaths = append(newPaths, p)
-		for _, v := range paths {
-			newPaths = append(newPaths, v)
+	if p != "" {
+		if strings.Contains(strings.ToLower(p), "client.keys") {
+			p = filepath.Dir(p)
 		}
 
-		paths = newPaths
+		if !utils.StrInArray(p, paths) {
+			newPaths := make([]string, 0)
+			newPaths = append(newPaths, p)
+			for _, v := range paths {
+				newPaths = append(newPaths, v)
+			}
+
+			paths = newPaths
+		}
 	}
 
 	for _, v := range paths {
