@@ -11,14 +11,16 @@ import (
 	"time"
 
 	"github.com/sedarasecurity/ossec-config-schema"
+	"github.com/sedarasecurity/ossecsvc"
 	"github.com/zerklabs/auburn/log"
 )
 
 var (
-	manager   string
-	port      int
-	agentname string
-	listen    bool
+	manager        string
+	port           int
+	agentname      string
+	listen         bool
+	restartService bool
 
 	configfile string
 	clientkeys string
@@ -27,6 +29,7 @@ var (
 func init() {
 	flag.StringVar(&manager, "manager", "", "Manager IP Address")
 	flag.BoolVar(&listen, "listen", false, "Enables running in server mode")
+	flag.BoolVar(&restartService, "controlsvc", false, "Enable or disable ossec-agent service control")
 	flag.IntVar(&port, "port", 1515, "Manager port")
 
 	h, err := os.Hostname()
@@ -56,6 +59,7 @@ func main() {
 	// client.keys
 	keysFile := getClientKeysPath(clientkeys)
 	if keysFile == "" {
+		log.Infof("client.keys not found, creating an empty file")
 		createDefaultClientKeys()
 	}
 
@@ -79,6 +83,20 @@ func main() {
 	if err := writeconfig(configFile, manager); err != nil {
 		log.Error(err)
 		return
+	}
+
+	if restartService {
+		if err := ossecsvc.Stop(); err != nil {
+			log.Error(err)
+		} else {
+			log.Infof("Service Stopped")
+		}
+
+		if err := ossecsvc.Start(); err != nil {
+			log.Error(err)
+		} else {
+			log.Infof("Service Started")
+		}
 	}
 }
 
