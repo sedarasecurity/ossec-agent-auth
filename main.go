@@ -113,7 +113,7 @@ func register(host string, port string) (string, error) {
 
 	conn, err := tls.Dial("tcp", net.JoinHostPort(host, port), tc)
 	if err != nil {
-		return "", fmt.Errorf("Error connecting to %s:%d. %v", host, port, err)
+		return "", fmt.Errorf("Error connecting to %s:%s. %v", host, port, err)
 	}
 
 	defer conn.Close()
