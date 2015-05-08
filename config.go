@@ -10,23 +10,25 @@ import (
 )
 
 func getOssecConfPath(p string) string {
+	localPaths := paths
+
 	if p != "" {
 		if strings.Contains(strings.ToLower(p), "ossec.conf") {
 			p = filepath.Dir(p)
 		}
 
-		if !utils.StrInArray(p, paths) {
+		if !utils.StrInArray(p, localPaths) {
 			newPaths := make([]string, 0)
 			newPaths = append(newPaths, p)
 			for _, v := range paths {
 				newPaths = append(newPaths, v)
 			}
 
-			paths = newPaths
+			localPaths = newPaths
 		}
 	}
 
-	for _, v := range paths {
+	for _, v := range localPaths {
 		if utils.FileExists(filepath.Join(v, "ossec.conf")) {
 			return filepath.Join(v, "ossec.conf")
 		}
@@ -36,23 +38,25 @@ func getOssecConfPath(p string) string {
 }
 
 func getClientKeysPath(p string) string {
+	localPaths := paths
+
 	if p != "" {
 		if strings.Contains(strings.ToLower(p), "client.keys") {
 			p = filepath.Dir(p)
 		}
 
-		if !utils.StrInArray(p, paths) {
+		if !utils.StrInArray(p, localPaths) {
 			newPaths := make([]string, 0)
 			newPaths = append(newPaths, p)
 			for _, v := range paths {
 				newPaths = append(newPaths, v)
 			}
 
-			paths = newPaths
+			localPaths = newPaths
 		}
 	}
 
-	for _, v := range paths {
+	for _, v := range localPaths {
 		if utils.FileExists(filepath.Join(v, "client.keys")) {
 			return filepath.Join(v, "client.keys")
 		}

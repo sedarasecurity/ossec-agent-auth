@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"time"
 
@@ -17,7 +18,7 @@ import (
 
 var (
 	manager        string
-	port           int
+	port           string
 	agentname      string
 	listen         bool
 	restartService bool
@@ -30,7 +31,7 @@ func init() {
 	flag.StringVar(&manager, "manager", "", "Manager IP Address")
 	flag.BoolVar(&listen, "listen", false, "Enables running in server mode")
 	flag.BoolVar(&restartService, "controlsvc", false, "Enable or disable ossec-agent service control")
-	flag.IntVar(&port, "port", 1515, "Manager port")
+	flag.StringVar(&port, "port", "1515", "Manager port")
 
 	h, err := os.Hostname()
 	if err != nil {
@@ -100,7 +101,7 @@ func main() {
 	}
 }
 
-func register(host string, port int) (string, error) {
+func register(host string, port string) (string, error) {
 	// see https://github.com/ossec/ossec-hids/blob/master/src/os_auth/main-server.c#L380 for buffer
 	// allocated from ossec-auth server
 	buf := make([]byte, 2048)
@@ -110,7 +111,7 @@ func register(host string, port int) (string, error) {
 		InsecureSkipVerify: true,
 	}
 
-	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", host, port), tc)
+	conn, err := tls.Dial("tcp", net.JoinHostPort(host, port), tc)
 	if err != nil {
 		return "", fmt.Errorf("Error connecting to %s:%d. %v", host, port, err)
 	}
